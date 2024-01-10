@@ -18,5 +18,9 @@ class Database {
     public function connect() {
         return $this->db_connection;
     }
+
+    function __destruct() {
+        $this->db_connection->close();
+    }
 }
 
