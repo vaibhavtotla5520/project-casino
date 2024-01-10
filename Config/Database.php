@@ -1,9 +1,9 @@
 <?php
 class Database {
     private $db_host = "127.0.0.1";
-    private $db_name = "project-casino";
-    private $db_user = "cash_win";
-    private $db_pass = "809ffb81";
+    private $db_name = "-";
+    private $db_user = "";
+    private $db_pass = "";
     private $db_connection;
     public $connectError;
 
