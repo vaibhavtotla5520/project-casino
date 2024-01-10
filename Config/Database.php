@@ -1,6 +1,6 @@
 <?php
 class Database {
-    private $db_host = "127.0.0.1";
+    private $db_host = "http://13.200.218.233";
     private $db_name = "project-casino";
     private $db_user = "root";
     private $db_pass = "809ffb81";
