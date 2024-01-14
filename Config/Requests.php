@@ -9,11 +9,17 @@ require_once "../Controllers/HomeController.php";
 
 $crypt = new Crypt;
 $Home = new HomeController;
+// echo "<pre>";
+// print_r($Home->verifyOtp(4,"396837"));
+// print_r($Home->refreshOtp(4));
+// print_r($Home->getWallet(4,"FETCH"));
+// print_r($Home->updateWallet(4,"+",100.00));
+// print_r($Home->updateWallet(4,"-",100.00));
 
-if (isset($_POST["token"]) && $crypt->decrypt($_POST["token"]) == ACCESS_TOKEN) {
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST["token"]) && $crypt->decrypt($_POST["token"]) == ACCESS_TOKEN) {
     // Register
+    // print_r($_POST);die;
     if (isset($_POST["submit"]) && $_POST["submit"] == "Register") {
-        // print_r($_POST);die;
         $error = "";
         if (empty($_POST['fullname'])) {
             $error = "Name is Empty";
@@ -60,6 +66,15 @@ if (isset($_POST["token"]) && $crypt->decrypt($_POST["token"]) == ACCESS_TOKEN) 
         if ($error != "")
             echo $error;
     }
+
+    if(isset($_POST["submit"]) && $_POST["submit"] == "get_wallet") {
+        echo $Home->getWallet(4,"FETCH");
+    }
+    if(isset($_POST["submit"]) && $_POST["submit"] == "update_wallet") {
+        if(!empty($_POST["amount"])) {
+            echo $Home->updateWallet(4,"FETCH", $amount);
+        }
+    }
 } else {
-    echo RETURN_HOME;
+    // echo RETURN_HOME;
 }
