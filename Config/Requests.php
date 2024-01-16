@@ -1,7 +1,80 @@
 <?php
-// Request Handler
-require_once "Constants.php";
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
-if(isset($_POST["submit"] && $_POST["ACCESS_TOKEN"] == ACCESS_TOKEN) {
-   // call to the required controller using require_once "filename.php"
+require_once "Crypt.php";
+require_once "Constants.php";
+require_once "../Controllers/HomeController.php";
+
+$crypt = new Crypt;
+$Home = new HomeController;
+// echo "<pre>";
+// print_r($Home->verifyOtp(4,"396837"));
+// print_r($Home->refreshOtp(4));
+// print_r($Home->getWallet(4,"FETCH"));
+// print_r($Home->updateWallet(4,"+",100.00));
+// print_r($Home->updateWallet(4,"-",100.00));
+
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST["token"]) && $crypt->decrypt($_POST["token"]) == ACCESS_TOKEN) {
+    // Register
+    // print_r($_POST);die;
+    if (isset($_POST["submit"]) && $_POST["submit"] == "Register") {
+        $error = "";
+        if (empty($_POST['fullname'])) {
+            $error = "Name is Empty";
+        } else if (empty($_POST['password'])) {
+            $error = "Password is Empty";
+        } else if (empty($_POST['cnf_password'])) {
+            $error = "Confirm Password is Empty";
+        } else if (empty($_POST['number'])) {
+            $error = "Number Can't be Empty";
+        } else {
+            $name = $_POST['fullname'];
+            $password = $_POST['password'];
+            $cnf_password = $_POST['cnf_password'];
+            $number = $_POST['number'];
+            $response = $Home->register($name, $password, $cnf_password, $number);
+            if ($response['status'] == 1) {
+                echo json_encode($response);
+            } else {
+                echo json_encode($response);
+            }
+        }
+        if ($error != "")
+            echo $error;
+    }
+    // Login
+    // die($_POST["submit"]);
+    if (isset($_POST["submit"]) && $_POST["submit"] == "Login") {
+        $error = "";
+        if (empty($_POST['number'])) {
+            $error = "Number is Empty";
+        } else if (empty($_POST['password'])) {
+            $error = "Password is Empty";
+        } else {
+            $number = $_POST['number'];
+            $password = $_POST['password'];
+            $response = $Home->login($number, $password);
+            if ($response['status'] == 1) {
+                echo json_encode($response);
+                // print_r($response);
+            } else {
+                echo json_encode($response);
+            }
+        }
+        if ($error != "")
+            echo $error;
+    }
+
+    if(isset($_POST["submit"]) && $_POST["submit"] == "get_wallet") {
+        echo $Home->getWallet(4,"FETCH");
+    }
+    if(isset($_POST["submit"]) && $_POST["submit"] == "update_wallet") {
+        if(!empty($_POST["amount"])) {
+            echo $Home->updateWallet(4,"FETCH", $_POST["amount"]);
+        }
+    }
+} else {
+    // echo RETURN_HOME;
 }
