@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST["token"]) && $crypt->d
     }
     if(isset($_POST["submit"]) && $_POST["submit"] == "update_wallet") {
         if(!empty($_POST["amount"])) {
-            echo $Home->updateWallet(4,"FETCH", $amount);
+            echo $Home->updateWallet(4,"FETCH", $_POST["amount"]);
         }
     }
 } else {
